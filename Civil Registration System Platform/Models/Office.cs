@@ -15,13 +15,13 @@ namespace Civil_Registration_System_Platform.Models
        
 
         public int GovernorateId { get; set; }       
-        public Governorate Governorate { get; set; } //   [ForeignKey("GovernorateId")]  
+        public Governorate Governorate { get; set; } 
 
 
 
-        public List<Application>? Applications { get; set; } // Navigation property to Applications
+        public List<Application>? Applications { get; set; }
 
-        public List<UserAccount>? UserAccounts { get; set; } //[InverseProperty("Office")]        
-        public List<UserAccount>? ManageUserAccounts { get; set; }//[InverseProperty("ManageOffice")]
+        public List<UserAccount>? UserAccounts { get; set; }
+        public List<UserAccount>? ManageUserAccounts { get; set; }
     }
 }

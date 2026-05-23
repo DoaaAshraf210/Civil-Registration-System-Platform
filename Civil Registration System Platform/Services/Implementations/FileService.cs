@@ -26,7 +26,6 @@ namespace Civil_Registration_System_Platform.Services.Implementations
             if (!IsValidFileSize(file))
                 throw new InvalidOperationException("حجم الملف يتجاوز الحد المسموح (5MB)");
 
-            // الباث: wwwroot/uploads/2025/05/
             var year = DateTime.Now.Year.ToString();
             var month = DateTime.Now.Month.ToString("D2");
             var folderPath = Path.Combine(

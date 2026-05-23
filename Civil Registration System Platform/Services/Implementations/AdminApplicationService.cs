@@ -24,7 +24,6 @@ namespace Civil_Registration_System_Platform.Services.Implementations
             _pricingService = pricingService;
         }
 
-        // ─── داشبورد المكتب 
 
         public async Task<AdminDashboardVM> GetOfficeDashboardAsync(
             int officeId, ApplicationStatus? filterStatus, ServiceType? filterService)
@@ -89,7 +88,6 @@ namespace Civil_Registration_System_Platform.Services.Implementations
             });
         }
 
-        //  تفاصيل طلب  
 
         public async Task<ReviewApplicationVM?> GetReviewDetailsAsync(int applicationId)
         {
@@ -171,13 +169,13 @@ namespace Civil_Registration_System_Platform.Services.Implementations
                 ApplicationStatus.UnderReview    => "جاري مراجعة طلبك",
                 ApplicationStatus.AdditionalInfoRequired => $"مطلوب مستندات إضافية: {note}",
                 ApplicationStatus.AppointmentScheduled  => "تم تحديد موعدك، تحقق من التفاصيل",
-                ApplicationStatus.MedicalExamPending    => "سيتم تحديد موعد الكشف الطبي قريباً",
-                ApplicationStatus.TheoryTestPending     => "سيتم تحديد موعد الاختبار النظري قريباً",
+                ApplicationStatus.MedicalExamPending  => "سيتم تحديد موعد الكشف الطبي قريباً",
+                ApplicationStatus.TheoryTestPending => "سيتم تحديد موعد الاختبار النظري قريباً",
                 ApplicationStatus.PracticalTestPending  => "سيتم تحديد موعد الاختبار العملي قريباً",
                 ApplicationStatus.Approved  => "تمت الموافقة على طلبك",
-                ApplicationStatus.Rejected  => $"تم رفض طلبك. السبب: {note}",
-                ApplicationStatus.Issued     => "تم إصدار الوثيقة، يمكنك استلامها",
-                ApplicationStatus.Cancelled   => "تم إلغاء الطلب",
+                ApplicationStatus.Rejected => $"تم رفض طلبك. السبب: {note}",
+                ApplicationStatus.Issued => "تم إصدار الوثيقة، يمكنك استلامها",
+                ApplicationStatus.Cancelled => "تم إلغاء الطلب",
                 _                                       => "تم تحديث حالة طلبك"
             };
 

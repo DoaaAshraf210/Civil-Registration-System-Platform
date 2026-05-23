@@ -22,9 +22,6 @@ namespace Civil_Registration_System_Platform.Account.AccountViewModel
         [Required(ErrorMessage = "اختر الحالة الاجتماعية")]
         public int MaritalStatus { get; set; } // enum
 
-        /// <summary>
-        /// صورة البطاقة — اختيارية للأدمن/الموظف (مطلوبة فقط للمواطن)
-        /// </summary>
         public IFormFile? CardImage { get; set; }
 
         [Required(ErrorMessage = "اسم المستخدم مطلوب")]

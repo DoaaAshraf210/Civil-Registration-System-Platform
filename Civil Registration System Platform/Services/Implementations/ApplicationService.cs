@@ -29,8 +29,6 @@ namespace Civil_Registration_System_Platform.Services.Implementations
             _fileService = fileService;
         }
 
-        // ─── Submit 
-
         public async Task<string> SubmitApplicationAsync(ApplyViewModel model, string userId)
         {
             var appNumber = await _appRepo.GenerateApplicationNumberAsync();
@@ -83,8 +81,6 @@ namespace Civil_Registration_System_Platform.Services.Implementations
             return appNumber;
         }
 
-        // ─── Track 
-
         public async Task<ApplicationTrackResultVM?> TrackApplicationAsync(string applicationNumber)
         {
             var app = await _appRepo.GetByApplicationNumberAsync(applicationNumber);
@@ -93,7 +89,7 @@ namespace Civil_Registration_System_Platform.Services.Implementations
             return await MapToTrackResultAsync(app);
         }
 
-        // ─── قائمة طلبات المواطن 
+        //  قائمة طلبات المواطن 
 
         public async Task<IEnumerable<ApplicationSummaryClientVM>> GetUserApplicationsAsync(string userId)
         {
@@ -116,9 +112,6 @@ namespace Civil_Registration_System_Platform.Services.Implementations
                 };
             });
         }
-
-        // ───  المواطن يشوف طلبه 
-
         public async Task<ApplicationTrackResultVM?> GetApplicationDetailsAsync(
             int applicationId, string userId)
         {
@@ -136,7 +129,6 @@ namespace Civil_Registration_System_Platform.Services.Implementations
 
             if (app == null || app.UserAccountId != userId) return;
 
-            // مينفعش يلغي لو اتوافق أو اتصدر
             if (app.Status == (int)ApplicationStatus.Approved ||
                 app.Status == (int)ApplicationStatus.Issued) return;
 
@@ -153,8 +145,6 @@ namespace Civil_Registration_System_Platform.Services.Implementations
 
             await _appRepo.SaveChangesAsync();
         }
-
-        //  المواطن يرد على طلب الأدمن للمستندات الإضافية 
         public async Task<string> RespondToAdditionalInfoAsync(
             int applicationId,
             string userId,
@@ -169,7 +159,6 @@ namespace Civil_Registration_System_Platform.Services.Implementations
             if (app.Status != (int)ApplicationStatus.AdditionalInfoRequired)
                 throw new Exception("لا يمكن الرد — حالة الطلب لا تتطلب مستندات إضافية");
 
-            // رفع المستندات الجديدة
             var uploadedCount = 0;
             if (additionalDocs != null && additionalDocs.Count > 0)
             {
@@ -194,7 +183,6 @@ namespace Civil_Registration_System_Platform.Services.Implementations
                 }
             }
 
-            // ترجع الحالة لـ UnderReview علشان الأدمن يراجع تاني
             app.Status = (int)ApplicationStatus.UnderReview;
             app.UpdatedAt = DateTime.UtcNow;
             await _appRepo.UpdateAsync(app);
@@ -219,7 +207,7 @@ namespace Civil_Registration_System_Platform.Services.Implementations
                 : "تم تحديث الطلب وأعيد للمراجعة";
         }
 
-        // ─── Private helper 
+        //  Private helper 
 
         private async Task<ApplicationTrackResultVM> MapToTrackResultAsync(Models.Application app)
         {

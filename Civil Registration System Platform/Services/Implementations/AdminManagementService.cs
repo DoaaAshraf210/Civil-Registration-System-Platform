@@ -6,7 +6,6 @@ using Civil_Registration_System_Platform.ViewModel;
 
 namespace Civil_Registration_System_Platform.Services.Implementations
 {
-    //السوبر أدمن بيدير الأدمن
     public class AdminManagementService : IAdminManagementService
     {
         private readonly IUserAccountRepository _userRepo;

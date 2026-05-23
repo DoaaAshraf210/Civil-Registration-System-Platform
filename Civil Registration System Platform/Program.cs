@@ -98,52 +98,12 @@ namespace Civil_Registration_System_Platform
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = services.GetRequiredService<UserManager<UserAccount>>();
 
-            string[] roles = ["SuperAdmin", "Admin", "Employee", "User", "AccountReviewer"];
+            string[] roles = ["SuperAdmin", "Admin", "Employee", "User"];
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
                     await roleManager.CreateAsync(new IdentityRole(role));
             }
-
-            var reviewer = await userManager.FindByEmailAsync("acrev@crs.gov.eg")
-                        ?? await userManager.FindByNameAsync("acrev");
-
-            if (reviewer == null)
-            {
-                reviewer = new UserAccount
-                {
-                    UserName = "acrev",
-                    Email = "acrev@crs.gov.eg",
-                    EmailConfirmed = true,
-                    FullName = "Account Reviewer",
-                    EGPhoneNumber = "01000000001",
-                    NationalID = "12345678901235",
-                    Gender = 1,
-                    MaritalStatus = 1,
-                    IsConfirmed = true,
-                    CardImagePath = string.Empty,
-                    CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow),
-                    IsRejected = false
-                };
-
-                var createResult = await userManager.CreateAsync(reviewer, "Reviewer@123");
-                if (!createResult.Succeeded)
-                    throw new InvalidOperationException(string.Join(", ", createResult.Errors.Select(e => e.Description)));
-            }
-            else
-            {
-                reviewer.UserName = "acrev";
-                reviewer.Email = "acrev@crs.gov.eg";
-                reviewer.EmailConfirmed = true;
-                reviewer.IsConfirmed = true;
-                reviewer.IsRejected = false;
-                reviewer.RejectionMessage = null;
-                reviewer.PasswordHash = userManager.PasswordHasher.HashPassword(reviewer, "Reviewer@123");
-                await userManager.UpdateAsync(reviewer);
-            }
-
-            if (!await userManager.IsInRoleAsync(reviewer, "AccountReviewer"))
-                await userManager.AddToRoleAsync(reviewer, "AccountReviewer");
         }
     }
 }

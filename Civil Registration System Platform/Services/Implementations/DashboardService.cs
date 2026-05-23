@@ -38,13 +38,8 @@ namespace Civil_Registration_System_Platform.Services.Implementations
             var cancelledName = ApplicationStatus.Cancelled.ToArabicName();
 
             var totalApplications = apps.Count;
-            var pendingApplications = apps.Count(a =>
-                                            a.StatusName != issuedName
-                                         && a.StatusName != rejectedName
-                                         && a.StatusName != cancelledName);
-            var approvedApplications  = apps.Count(a =>
-                                            a.StatusName == issuedName
-                                         || a.StatusName == approvedName);
+            var pendingApplications = apps.Count(a => a.StatusName != issuedName && a.StatusName != rejectedName && a.StatusName != cancelledName);
+            var approvedApplications  = apps.Count(a => a.StatusName == issuedName || a.StatusName == approvedName);
             var rejectedApplications = apps.Count(a => a.StatusName == rejectedName);
 
             return new DashboardVM

@@ -7,10 +7,7 @@ namespace Civil_Registration_System_Platform.GlobalServices.GlobalInterface
         /// <summary>يتحقق إن المستخدم الحالي أدمن — يرمي استثناء لو لأ</summary>
         Task<bool> CheckIfIsAdmin();
 
-        /// <summary>يتحقق إن المستخدم الحالي قادر على مراجعة حسابات المواطنين (Admin أو AccountReviewer)</summary>
+        /// <summary>يتحقق إن المستخدم الحالي قادر على مراجعة حسابات المواطنين (Admin)</summary>
         Task<bool> CheckIfCanReviewAccounts();
-
-        /// <summary>هل المستخدم الحالي AccountReviewer (وليس Admin)؟</summary>
-        Task<bool> IsAccountReviewer();
     }
 }

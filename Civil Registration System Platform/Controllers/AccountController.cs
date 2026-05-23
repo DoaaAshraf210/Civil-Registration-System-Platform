@@ -18,8 +18,8 @@ namespace Civil_Registration_System_Platform.Controllers
             UserManager<UserAccount> userManager)
         {
             _accountServices = accountServices;
-            _signInManager   = signInManager;
-            _userManager     = userManager;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
 
@@ -79,8 +79,6 @@ namespace Civil_Registration_System_Platform.Controllers
                 if (await _userManager.IsInRoleAsync(user, "SuperAdmin"))
                     return RedirectToAction("Index", "SuperAdmin");
 
-                if (await _userManager.IsInRoleAsync(user, "AccountReviewer"))
-                    return RedirectToAction("UnconfirmedUsers", "Admin");
 
                 if (await _userManager.IsInRoleAsync(user, "Admin")
                  || await _userManager.IsInRoleAsync(user, "Employee"))

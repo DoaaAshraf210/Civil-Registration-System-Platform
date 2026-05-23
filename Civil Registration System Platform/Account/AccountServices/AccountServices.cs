@@ -1,12 +1,9 @@
-﻿using Civil_Registration_System_Platform.Account.AccountViewModel;
+using Civil_Registration_System_Platform.Account.AccountViewModel;
 using Microsoft.AspNetCore.Identity;
-
-
+using Microsoft.EntityFrameworkCore;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
-
-
 
 namespace Civil_Registration_System_Platform.Account.AccountServices
 {
@@ -17,11 +14,11 @@ namespace Civil_Registration_System_Platform.Account.AccountServices
         private readonly IUserAccountRepository _userAccountRepository;
         private readonly IWebHostEnvironment _env;
 
-        public AccountServices(UserManager<UserAccount> userManager, SignInManager<UserAccount> signInManager , IUserAccountRepository userAccountRepository, IWebHostEnvironment env)
+        public AccountServices(UserManager<UserAccount> userManager, SignInManager<UserAccount> signInManager, IUserAccountRepository userAccountRepository, IWebHostEnvironment env)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _userAccountRepository = userAccountRepository; 
+            _userAccountRepository = userAccountRepository;
             _env = env;
         }
 
@@ -35,6 +32,9 @@ namespace Civil_Registration_System_Platform.Account.AccountServices
 
             if (await _userManager.Users.AnyAsync(u => u.NationalID == registerViewModel.NationalID))
                 return "الرقم القومي مستخدم بالفعل.";
+
+            if (await _userManager.Users.AnyAsync(u => u.EGPhoneNumber == registerViewModel.EGPhoneNumber))
+                return "رقم الموبايل مستخدم بالفعل في حساب آخر.";
 
             UserAccount userAccount = new UserAccount
             {
@@ -71,6 +71,15 @@ namespace Civil_Registration_System_Platform.Account.AccountServices
 
         public async Task<string> RegisterEmployeeAsync(RegisterAdminOrEmployeeViewModel registerEmployeeViewModel)
         {
+            if (await _userManager.Users.AnyAsync(u => u.NationalID == registerEmployeeViewModel.NationalID))
+                return "الرقم القومي مستخدم بالفعل.";
+
+            if (await _userManager.Users.AnyAsync(u => u.EGPhoneNumber == registerEmployeeViewModel.EGPhoneNumber))
+                return "رقم الموبايل مستخدم بالفعل.";
+
+            if (await _userManager.Users.AnyAsync(u => u.UserName == registerEmployeeViewModel.UserName))
+                return "اسم المستخدم مستخدم بالفعل.";
+
             UserAccount userAccount = new UserAccount
             {
                 UserName = registerEmployeeViewModel.UserName,
@@ -83,7 +92,7 @@ namespace Civil_Registration_System_Platform.Account.AccountServices
                 GovernorateId = registerEmployeeViewModel.GovernorateId,
                 OfficeId = registerEmployeeViewModel.OfficeId,
                 ManageOfficeId = null,
-                IsConfirmed = true  
+                IsConfirmed = true
             };
             userAccount = await CreateUserImage(registerEmployeeViewModel.CardImage, userAccount);
             IdentityResult result = await _userManager.CreateAsync(userAccount, registerEmployeeViewModel.PassWord);
@@ -104,9 +113,17 @@ namespace Civil_Registration_System_Platform.Account.AccountServices
             }
         }
 
-
         public async Task<string> RegisterAdminAsync(RegisterAdminOrEmployeeViewModel registerAdminViewModel)
         {
+            if (await _userManager.Users.AnyAsync(u => u.NationalID == registerAdminViewModel.NationalID))
+                return "الرقم القومي مستخدم بالفعل.";
+
+            if (await _userManager.Users.AnyAsync(u => u.EGPhoneNumber == registerAdminViewModel.EGPhoneNumber))
+                return "رقم الموبايل مستخدم بالفعل.";
+
+            if (await _userManager.Users.AnyAsync(u => u.UserName == registerAdminViewModel.UserName))
+                return "اسم المستخدم مستخدم بالفعل.";
+
             UserAccount userAccount = new UserAccount
             {
                 UserName = registerAdminViewModel.UserName,
@@ -121,7 +138,7 @@ namespace Civil_Registration_System_Platform.Account.AccountServices
                 ManageOfficeId = null,
                 IsConfirmed = true
             };
-            
+
             userAccount = await CreateUserImage(registerAdminViewModel.CardImage, userAccount);
             IdentityResult result = await _userManager.CreateAsync(userAccount, registerAdminViewModel.PassWord);
 
@@ -143,7 +160,6 @@ namespace Civil_Registration_System_Platform.Account.AccountServices
 
         public async Task<string> LoginUserAsync(LoginViewModel loginViewModel)
         {
-       
             UserAccount? userAccount =
                    await _userManager.FindByNameAsync(loginViewModel.UserName)
                 ?? await _userManager.FindByEmailAsync(loginViewModel.UserName)
@@ -162,8 +178,6 @@ namespace Civil_Registration_System_Platform.Account.AccountServices
             await _signInManager.SignInAsync(userAccount, true);
             return "Login Successful";
         }
-
-
 
         public async Task<GetMyAccount> GetMyAccount()
         {
@@ -190,14 +204,11 @@ namespace Civil_Registration_System_Platform.Account.AccountServices
             return getMyAccount;
         }
 
-
-
-
         public async Task<string> EditMyAccount(UserAccountEdit userAccountEdit)
         {
             UserAccount userAccount = await _userAccountRepository.GetMyAccount();
 
-            userAccount.FullName = userAccountEdit.FullName;    
+            userAccount.FullName = userAccountEdit.FullName;
             userAccount.EGPhoneNumber = userAccountEdit.EGPhoneNumber;
             userAccount.NationalID = userAccountEdit.NationalID;
             userAccount.Gender = userAccountEdit.Gender;
@@ -214,30 +225,23 @@ namespace Civil_Registration_System_Platform.Account.AccountServices
             }
             catch (Exception ex)
             {
-                throw new Exception( $"Error deleting old image: {ex.Message}");
+                throw new Exception($"Error deleting old image: {ex.Message}");
             }
             userAccount = await CreateUserImage(userAccountEdit.CardImage, userAccount);
 
 
-            userAccount.IsRejected = false; 
+            userAccount.IsRejected = false;
             userAccount.RejectionMessage = null;
 
-            await _userAccountRepository.SaveUser(userAccount); 
+            await _userAccountRepository.SaveUser(userAccount);
             return "تم تحديث الحساب بنجاح";
         }
-
-
-
-
-
-
-
 
         private async Task<bool> DeleteImg(UserAccount user)
         {
             if (user.CardImagePath == null)
                 return false;
-             
+
             string fullPath = Path.Combine(
                 _env.WebRootPath,
                 "AccountCardImages",
@@ -255,10 +259,6 @@ namespace Civil_Registration_System_Platform.Account.AccountServices
             return true;
         }
 
-
-        // creating image 
-
-
         public async Task<UserAccount> CreateUserImage(IFormFile? cardImg, UserAccount userAccount)
         {
             if (cardImg == null || cardImg.Length == 0)
@@ -272,58 +272,43 @@ namespace Civil_Registration_System_Platform.Account.AccountServices
             userAccount.CardImagePath = $"/AccountCardImages/{fileName}";
             return userAccount;
         }
-        
-
 
         private string Checking(IFormFile img)
         {
-
             if (img == null || img.Length == 0)
                 throw new Exception("لم يتم رفع صورة");
 
-            // 2️⃣ تحقق من الامتداد
             var allowedExt = new[] { ".jpg", ".jpeg", ".png" };
             var ext = Path.GetExtension(img.FileName).ToLower();
             if (!allowedExt.Contains(ext))
                 throw new Exception("نوع الصورة غير مسموح");
 
-            //    // 1️⃣ تحقق من الحجم (1MB)
             if (img.Length > 1024 * 1024 * 5)
                 throw new Exception("الحد الأقصى لحجم الصورة هو 5 ميجابايت");
-
 
             return ext;
         }
 
-
         private async Task<string> Create(IFormFile img, string ext)
         {
-            // 3️⃣ GUID
             var guid = Guid.NewGuid().ToString("N");
 
             string folderPath = Path.Combine(_env.WebRootPath, "AccountCardImages");
             Directory.CreateDirectory(folderPath);
 
-
-            // 5️⃣ المسار الكامل
             var fileName = guid + ext;
             var fullPath = Path.Combine(folderPath, fileName);
 
-
-            // 6️⃣ حفظ الصورة + ضغط
             using var imageSharp = Image.Load(img.OpenReadStream());
             imageSharp.Mutate(x => x.Resize(new ResizeOptions
             {
                 Mode = ResizeMode.Max,
                 Size = new Size(1024, 1024)
             }));
-            // ضغط JPEG
             var encoder = new JpegEncoder { Quality = 80 };
             await imageSharp.SaveAsync(fullPath, encoder);
 
             return fileName;
         }
-
-
     }
 }

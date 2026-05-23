@@ -1,4 +1,4 @@
-﻿
+
 using Civil_Registration_System_Platform.Relation_Constraint_Configration;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
@@ -18,7 +18,6 @@ namespace Civil_Registration_System_Platform.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            // Additional configuration can be added here if needed
             modelBuilder.ConfigureAll();
 
 
@@ -48,12 +47,6 @@ namespace Civil_Registration_System_Platform.Models
                 Id = "4",
                 Name = "User",
                 NormalizedName = "USER"
-            },
-            new IdentityRole
-            {
-                Id = "5",
-                Name = "AccountReviewer",
-                NormalizedName = "ACCOUNTREVIEWER"
             }
             );
 
@@ -92,39 +85,6 @@ namespace Civil_Registration_System_Platform.Models
             {
                 UserId = "1",
                 RoleId = "1"
-            });
-            #endregion
-
-            #region seed AccountReviewer Account
-            // مسؤول مراجعة حسابات المواطنين الجديدة
-            // ─── Login: acrev@crs.gov.eg / Reviewer@123 ───
-            var reviewer = new UserAccount
-            {
-                Id = "2",
-                UserName = "acrev",
-                NormalizedUserName = "ACREV",
-                Email = "acrev@crs.gov.eg",
-                NormalizedEmail = "ACREV@CRS.GOV.EG",
-                EmailConfirmed = true,
-
-                FullName = "مراجع الحسابات",
-                EGPhoneNumber = "01000000001",
-                NationalID = "12345678901235",
-                Gender = 1,
-                MaritalStatus = 1,
-                IsConfirmed = true,
-                CardImagePath = "default.png",
-                CreatedAt = DateOnly.FromDateTime(DateTime.UtcNow),
-                IsRejected = false,
-                SecurityStamp = Guid.NewGuid().ToString()
-            };
-            reviewer.PasswordHash = hasher.HashPassword(reviewer, "Reviewer@123");
-            modelBuilder.Entity<UserAccount>().HasData(reviewer);
-
-            modelBuilder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
-            {
-                UserId = "2",
-                RoleId = "5"
             });
             #endregion
 
@@ -394,11 +354,8 @@ namespace Civil_Registration_System_Platform.Models
             #endregion
 
             #region seed ServicesTypeHelper (الأسعار + المدد + المستندات المطلوبة)
-            // البيانات مطابقة للـ JS frontend (apply.html / app.js)
-            // SuperAdmin يقدر يعدّلها بعد كده عبر صفحة Pricing
-            // ─── الفصل بين المستندات بـ '|' — ApplyFormService.ParseRequiredDocs بيقسمها ───
+          
             modelBuilder.Entity<ServicesTypeHelper>().HasData(
-                // ─── شهادة الميلاد (1) ─────────────────────────────────
                 new ServicesTypeHelper
                 {
                     ServicesTypeEnum    = (int)Enums.ServiceType.BirthCertificate,
@@ -408,22 +365,20 @@ namespace Civil_Registration_System_Platform.Models
                 },
                 new ServicesTypeHelper
                 {
-                    ServicesTypeEnum    = (int)Enums.ServiceType.BirthCertificate,
+                    ServicesTypeEnum  = (int)Enums.ServiceType.BirthCertificate,
                     ApplicationTypeEnum = (int)Enums.ApplicationType.RegisterNewBirth,
                     Price = 0, DurationInDays = 0,
                     Details = "إشعار ولادة من المستشفى|بطاقة ولي الأمر"
                 },
 
-                // ─── شهادة الوفاة (2) ─────────────────────────────────
                 new ServicesTypeHelper
                 {
-                    ServicesTypeEnum    = (int)Enums.ServiceType.DeathCertificate,
+                    ServicesTypeEnum = (int)Enums.ServiceType.DeathCertificate,
                     ApplicationTypeEnum = (int)Enums.ApplicationType.New,
                     Price = 63, DurationInDays = 1,
                     Details = "تقرير طبي|إشعار الوفاة من المستشفى"
                 },
 
-                // ─── قسيمة الزواج (3) ─────────────────────────────────
                 new ServicesTypeHelper
                 {
                     ServicesTypeEnum    = (int)Enums.ServiceType.MarriageCertificate,
@@ -432,7 +387,6 @@ namespace Civil_Registration_System_Platform.Models
                     Details = "بيانات الزوج والزوجة (ثلاثي-رباعي)|تاريخ الزواج"
                 },
 
-                // ─── قسيمة الطلاق (4) ─────────────────────────────────
                 new ServicesTypeHelper
                 {
                     ServicesTypeEnum    = (int)Enums.ServiceType.DivorceCertificate,
@@ -441,7 +395,6 @@ namespace Civil_Registration_System_Platform.Models
                     Details = "بيانات الزوج والزوجة|تاريخ الطلاق"
                 },
 
-                // ─── بطاقة الرقم القومي (5) ───────────────────────────
                 new ServicesTypeHelper
                 {
                     ServicesTypeEnum    = (int)Enums.ServiceType.NationalId,
@@ -471,7 +424,6 @@ namespace Civil_Registration_System_Platform.Models
                     Details = "البطاقة التالفة|عدد 2 صورة شخصية"
                 },
 
-                // ─── جواز السفر (6) ───────────────────────────────────
                 new ServicesTypeHelper
                 {
                     ServicesTypeEnum    = (int)Enums.ServiceType.Passport,
@@ -501,7 +453,6 @@ namespace Civil_Registration_System_Platform.Models
                     Details = "الجواز التالف|بطاقة قومي سارية"
                 },
 
-                // ─── قيد عائلي (8) ────────────────────────────────────
                 new ServicesTypeHelper
                 {
                     ServicesTypeEnum    = (int)Enums.ServiceType.FamilyCard,
@@ -510,7 +461,6 @@ namespace Civil_Registration_System_Platform.Models
                     Details = "الرقم القومي|اسم رب الأسرة"
                 },
 
-                // ─── قيد فردي (9) ─────────────────────────────────────
                 new ServicesTypeHelper
                 {
                     ServicesTypeEnum    = (int)Enums.ServiceType.IndividualRecord,
@@ -518,10 +468,6 @@ namespace Civil_Registration_System_Platform.Models
                     Price = 63, DurationInDays = 1,
                     Details = "الرقم القومي"
                 },
-
-                // ─── رخصة القيادة (10) ────────────────────────────────
-                // ملاحظة: في مصر الكشف الطبي بيشمل اختبار النظر — مفيش اختبار نظر منفصل
-                // الخطوات: تقديم → مراجعة → كشف طبي → نظري → عملي → دفع → إصدار
                 new ServicesTypeHelper
                 {
                     ServicesTypeEnum    = (int)Enums.ServiceType.DriversLicense,
@@ -561,7 +507,6 @@ namespace Civil_Registration_System_Platform.Models
         public DbSet<Appointment> Appointments { get; set; }        
         public DbSet<TimelineEntry> TimelineEntries { get; set; }   
         public DbSet<ApplicationDocuments> ApplicationDocuments { get; set; }       
-       // public DbSet<ApplicationTypeHelper> ApplicationTypeHelpers { get; set; }    
         public DbSet<ServicesTypeHelper> ServicesTypeHelpers { get; set; }  
 
     }

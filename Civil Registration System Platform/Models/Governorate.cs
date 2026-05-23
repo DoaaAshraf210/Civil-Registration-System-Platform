@@ -12,8 +12,8 @@
 
 
 
-        public List<Office>? Offices { get; set; } // Navigation property to Offices
-        public List<UserAccount>? UserAccounts { get; set; } // Navigation property to RegularUsers
+        public List<Office>? Offices { get; set; } 
+        public List<UserAccount>? UserAccounts { get; set; } 
     }
 
 

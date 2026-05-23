@@ -141,9 +141,7 @@ namespace Civil_Registration_System_Platform.Services.Implementations
             {
                 AppointmentId = a.AppointmentId,
                 ApplicationNumber = a.Application?.ApplicationNumber ?? string.Empty,
-                ServiceTypeName   = a.Application != null
-                                      ? ((ServiceType)a.Application.ServiceType).ToArabicName()
-                                      : string.Empty,
+                ServiceTypeName   = a.Application != null ? ((ServiceType)a.Application.ServiceType).ToArabicName() : string.Empty,
                 AppointmentDate = a.AppointmentDate,
                 OfficeName   = a.Application?.Office?.Name ?? string.Empty,
                 StatusName    = appointmentStatus.ToArabicName()

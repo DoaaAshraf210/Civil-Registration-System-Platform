@@ -83,22 +83,22 @@ namespace Civil_Registration_System_Platform.Account.AccountServices
             return users.Select(MapToVM).ToList();
         }
 
-        // ───── helper ─────
+        // helper 
         private static OfficeUserListItemVM MapToVM(UserAccount u) => new()
         {
-            UserId           = u.Id,
-            FullName         = u.FullName,
-            Email            = u.Email ?? string.Empty,
-            EGPhoneNumber    = u.EGPhoneNumber,
-            NationalID       = u.NationalID,
-            CardImagePath    = u.CardImagePath,
-            Gender           = u.Gender,
-            MaritalStatus    = u.MaritalStatus,
-            CreatedAt        = u.CreatedAt,
-            GovernorateName  = u.Governorate?.Name,
-            OfficeName       = u.Office?.Name,
-            IsConfirmed      = u.IsConfirmed,
-            IsRejected       = u.IsRejected,
+            UserId = u.Id,
+            FullName = u.FullName,
+            Email = u.Email ?? string.Empty,
+            EGPhoneNumber = u.EGPhoneNumber,
+            NationalID = u.NationalID,
+            CardImagePath = u.CardImagePath,
+            Gender = u.Gender,
+            MaritalStatus = u.MaritalStatus,
+            CreatedAt = u.CreatedAt,
+            GovernorateName = u.Governorate?.Name,
+            OfficeName = u.Office?.Name,
+            IsConfirmed = u.IsConfirmed,
+            IsRejected = u.IsRejected,
             RejectionMessage = u.RejectionMessage
         };
     }

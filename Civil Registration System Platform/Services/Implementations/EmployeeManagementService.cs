@@ -6,7 +6,6 @@ using Civil_Registration_System_Platform.ViewModel;
 
 namespace Civil_Registration_System_Platform.Services.Implementations
 {
-    // الأدمن بيدير موظفي مكتبه
     public class EmployeeManagementService : IEmployeeManagementService
     {
         private readonly IUserAccountRepository _userRepo;

@@ -49,7 +49,7 @@ namespace Civil_Registration_System_Platform.Services.Implementations
 
                     var priceDisplay = minPrice == maxPrice
                         ? (minPrice > 0 ? $"{minPrice} ج.م" : "مجاناً")
-                        : $"{minPrice} - {maxPrice} ج.م";
+                        : (minPrice == 0 ? $"مجاناً - {maxPrice} ج.م" : $"{minPrice} - {maxPrice} ج.م");
 
                     var durationDisplay = minDays == maxDays
                         ? FormatDuration(minDays)
@@ -123,16 +123,16 @@ namespace Civil_Registration_System_Platform.Services.Implementations
         private static Dictionary<int, (string Icon, string ColorClass, string Category, string Description)>
             GetServiceMeta() => new()
         {
-            [(int)ServiceType.BirthCertificate]    = ("bi-file-earmark-medical", "color-birth",      "civil",    "إصدار أو استخراج شهادة ميلاد مميكنة"),
-            [(int)ServiceType.DeathCertificate]    = ("bi-file-earmark-minus",   "color-death",      "civil",    "إصدار شهادة وفاة مميكنة"),
-            [(int)ServiceType.MarriageCertificate] = ("bi-heart",                "color-marriage",   "civil",    "استخراج قسيمة زواج رسمية"),
-            [(int)ServiceType.DivorceCertificate]  = ("bi-scissors",             "color-divorce",    "civil",    "استخراج قسيمة طلاق رسمية"),
-            [(int)ServiceType.NationalId]          = ("bi-person-badge",         "color-nationalid", "identity", "استخراج أو تجديد أو بدل فاقد/تالف"),
-            [(int)ServiceType.Passport]            = ("bi-airplane",             "color-passport",   "travel",   "استخراج أو تجديد أو بدل فاقد/تالف"),
-            [(int)ServiceType.DriversLicense]      = ("bi-car-front",            "color-license",    "travel",   "استخراج أو تجديد أو بدل فاقد/تالف"),
-            [(int)ServiceType.FamilyCard]          = ("bi-people",               "color-family",     "civil",    "استخراج قيد عائلي رسمي"),
-            [(int)ServiceType.IndividualRecord]    = ("bi-person-lines-fill",    "color-individual", "identity", "استخراج قيد فردي رسمي"),
-            [(int)ServiceType.CriminalRecord]      = ("bi-shield-check",         "color-individual", "identity", "صحيفة السوابق الجنائية"),
+            [(int)ServiceType.BirthCertificate] = ("bi-file-earmark-medical", "color-birth",  "civil",    "إصدار أو استخراج شهادة ميلاد مميكنة"),
+            [(int)ServiceType.DeathCertificate] = ("bi-file-earmark-minus",   "color-death",      "civil",    "إصدار شهادة وفاة مميكنة"),
+            [(int)ServiceType.MarriageCertificate] = ("bi-heart",   "color-marriage",   "civil",    "استخراج قسيمة زواج رسمية"),
+            [(int)ServiceType.DivorceCertificate]  = ("bi-scissors",   "color-divorce",    "civil",    "استخراج قسيمة طلاق رسمية"),
+            [(int)ServiceType.NationalId]  = ("bi-person-badge",  "color-nationalid", "identity", "استخراج أو تجديد أو بدل فاقد/تالف"),
+            [(int)ServiceType.Passport] = ("bi-airplane",   "color-passport",   "travel",   "استخراج أو تجديد أو بدل فاقد/تالف"),
+            [(int)ServiceType.DriversLicense] = ("bi-car-front",   "color-license",    "travel",   "استخراج أو تجديد أو بدل فاقد/تالف"),
+            [(int)ServiceType.FamilyCard] = ("bi-people",               "color-family",     "civil",    "استخراج قيد عائلي رسمي"),
+            [(int)ServiceType.IndividualRecord] = ("bi-person-lines-fill",    "color-individual", "identity", "استخراج قيد فردي رسمي"),
+            [(int)ServiceType.CriminalRecord]  = ("bi-shield-check",         "color-individual", "identity", "صحيفة السوابق الجنائية"),
             [(int)ServiceType.CustomDocument]      = ("bi-file-earmark-text",    "color-individual", "civil",    "مستند مخصص"),
         };
     }

@@ -105,10 +105,10 @@ namespace Civil_Registration_System_Platform.Services.Implementations
             return "تم حذف السعر بنجاح";
         }
 
-        // ─── helpers ───
+        //  helpers 
         private static string FormatDuration(int days) => days switch
         {
-            0     => "فوري",
+            0  => "فوري",
             1     => "يوم واحد",
             <= 3  => $"1-{days} أيام",
             <= 7  => $"3-{days} أيام",

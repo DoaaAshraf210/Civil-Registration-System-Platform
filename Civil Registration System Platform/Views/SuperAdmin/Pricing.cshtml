@@ -47,18 +47,10 @@
                                         @string.Join("، ", p.Details.Split(new[] { '|', ';', '\n' }, StringSplitOptions.RemoveEmptyEntries))
                                     }
                                 </td>
-                                <td class="d-flex gap-2">
+                                 <td>
                                     <a asp-action="EditPrice" asp-route-serviceType="@p.ServiceTypeId" asp-route-applicationType="@p.ApplicationTypeId" class="btn btn-gov-outline btn-sm" style="padding:4px 10px;font-size:0.78rem;">
-                                        <i class="bi bi-pencil"></i>
+                                        <i class="bi bi-pencil ms-1"></i> تعديل
                                     </a>
-                                    <form asp-action="DeletePrice" method="post" class="d-inline" onsubmit="return confirm('حذف هذا السعر؟');">
-                                        @Html.AntiForgeryToken()
-                                        <input type="hidden" name="serviceType" value="@p.ServiceTypeId">
-                                        <input type="hidden" name="applicationType" value="@p.ApplicationTypeId">
-                                        <button type="submit" class="btn btn-gov-danger btn-sm" style="padding:4px 10px;font-size:0.78rem;">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
                                 </td>
                             </tr>
                         }

@@ -1,4 +1,4 @@
-﻿using Civil_Registration_System_Platform.GlobalServices.GlobalInterface;
+using Civil_Registration_System_Platform.GlobalServices.GlobalInterface;
 using Microsoft.AspNetCore.Identity;
 
 namespace Civil_Registration_System_Platform.GlobalServices.GlobalClass
@@ -38,16 +38,9 @@ namespace Civil_Registration_System_Platform.GlobalServices.GlobalClass
         {
             UserAccount userLogin = await GetUser();
             var isAdmin = await _userManager.IsInRoleAsync(userLogin, "Admin");
-            var isReviewer = await _userManager.IsInRoleAsync(userLogin, "AccountReviewer");
-            if (!isAdmin && !isReviewer)
-                throw new Exception("you cannot review citizen accounts");
+            if (!isAdmin)
+                throw new Exception("لا تمتلك صلاحية مراجعة حسابات المواطنين (يجب أن تكون أدمن)");
             return true;
-        }
-
-        public async Task<bool> IsAccountReviewer()
-        {
-            UserAccount userLogin = await GetUser();
-            return await _userManager.IsInRoleAsync(userLogin, "AccountReviewer");
         }
     }
 }

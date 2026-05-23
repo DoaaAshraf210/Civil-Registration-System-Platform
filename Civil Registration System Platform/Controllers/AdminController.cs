@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Civil_Registration_System_Platform.Controllers
 {
-    [Authorize(Roles = "Admin,Employee,AccountReviewer")]
+    [Authorize(Roles = "Admin,Employee")]
     public class AdminController : Controller
     {
         private readonly IAdminApplicationService _adminAppService;
@@ -40,8 +40,7 @@ namespace Civil_Registration_System_Platform.Controllers
             ApplicationStatus? status = null,
             ServiceType? serviceType = null)
         {
-            if (User.IsInRole("AccountReviewer"))
-                return RedirectToAction(nameof(UnconfirmedUsers));
+            // Deleted AccountReviewer check
 
             var officeIds = await GetAccessibleOfficeIdsAsync();
             if (!officeIds.Any())
@@ -253,7 +252,7 @@ namespace Civil_Registration_System_Platform.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,AccountReviewer")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UnconfirmedUsers()
         {
             var users = await _accountManageServices.GetUnConfirmedUserAsync();
@@ -261,7 +260,7 @@ namespace Civil_Registration_System_Platform.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin,AccountReviewer")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ConfirmUser(string userId)
         {
@@ -278,7 +277,7 @@ namespace Civil_Registration_System_Platform.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin,AccountReviewer")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RejectUser(string userId, string? messageReject)
         {

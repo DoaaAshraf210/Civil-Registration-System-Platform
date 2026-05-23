@@ -112,21 +112,18 @@ namespace Civil_Registration_System_Platform.Repositories.Implementations
             return $"CRS-{year}-{(count + 1):D4}";
         }
 
-        // ─── Bulk stats — replaces N×M queries with one GroupBy ──────────
 
         public async Task<Dictionary<int, Dictionary<int, int>>> GetStatsByOfficesAsync(
             IEnumerable<int> officeIds)
         {
             var ids = officeIds.ToList();
 
-            // استعلام واحد فقط — Group by (OfficeId, Status)
             var rows = await _context.Applications
                 .Where(a => !a.IsDeleted && ids.Contains(a.OfficeId))
                 .GroupBy(a => new { a.OfficeId, a.Status })
                 .Select(g => new { g.Key.OfficeId, g.Key.Status, Count = g.Count() })
                 .ToListAsync();
 
-            // pivot to nested dictionary: {OfficeId → {Status → Count}}
             var result = ids.ToDictionary(id => id, id => new Dictionary<int, int>());
             foreach (var row in rows)
                 result[row.OfficeId][row.Status] = row.Count;

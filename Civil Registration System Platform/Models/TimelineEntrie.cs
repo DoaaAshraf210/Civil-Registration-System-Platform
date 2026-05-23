@@ -5,23 +5,19 @@
         [Key]
         public int TimelineEntryId { get; set; }
         
-        public int Status { get; set; } // enum e.g., Submitted, Under Review, Approved, Rejected   
-        public DateTime Timestamp { get; set; } // When the event occurred
+        public int Status { get; set; }   
+        public DateTime Timestamp { get; set; } 
 
         [MaxLength(300)]
-        public string? Description { get; set; } // Description of the timeline entry
-
-        // Foreign key to Application
+        public string? Description { get; set; } 
         public int ApplicationId { get; set; }
         
-        public Application Application { get; set; } // [ForeignKey("ApplicationId")] 
+        public Application Application { get; set; } 
 
-
-        //PerformedBy
         public string PerformedById { get; set; }        
-        public UserAccount PerformedBy { get; set; } //[ForeignKey("PerformedById")] 
+        public UserAccount PerformedBy { get; set; } 
 
         public string UserAccountId { get; set; }
-        public bool IsDeleted { get; set; } // Soft delete flag
+        public bool IsDeleted { get; set; }
     }
 }

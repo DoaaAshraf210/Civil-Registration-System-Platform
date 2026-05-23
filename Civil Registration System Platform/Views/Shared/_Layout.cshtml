@@ -3,7 +3,6 @@
     var isSuperAdmin = User?.IsInRole("SuperAdmin") == true;
     var isAdmin      = User?.IsInRole("Admin") == true;
     var isEmployee   = User?.IsInRole("Employee") == true;
-    var isReviewer   = User?.IsInRole("AccountReviewer") == true;
     var isCitizen    = User?.IsInRole("User") == true;
     var displayName  = User?.Identity?.Name ?? "";
 }
@@ -101,12 +100,6 @@
                         {
                             <a asp-controller="Admin" asp-action="Index" class="btn btn-gov-gold btn-sm">
                                 <i class="bi bi-speedometer2 ms-1"></i> لوحة التحكم
-                            </a>
-                        }
-                        else if (isReviewer)
-                        {
-                            <a asp-controller="Admin" asp-action="UnconfirmedUsers" class="btn btn-gov-gold btn-sm">
-                                <i class="bi bi-person-check ms-1"></i> Account review
                             </a>
                         }
                         else if (isCitizen)

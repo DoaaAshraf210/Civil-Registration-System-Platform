@@ -1,4 +1,4 @@
-﻿using Civil_Registration_System_Platform.Models;
+using Civil_Registration_System_Platform.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Civil_Registration_System_Platform.Relation_Constraint_Configration
@@ -13,9 +13,9 @@ namespace Civil_Registration_System_Platform.Relation_Constraint_Configration
             modelBuilder.Entity<UserAccount>(entity =>
             {
                 entity.HasIndex(u => u.NationalID).IsUnique();
-
                 entity.HasIndex(e=>e.Email).IsUnique();
                 entity.HasIndex(u => u.UserName).IsUnique();
+                entity.HasIndex(u => u.EGPhoneNumber).IsUnique();
 
                 entity.Property(u => u.CreatedAt)
                     .HasDefaultValueSql("GETDATE()");   

@@ -1,6 +1,9 @@
 using Civil_Registration_System_Platform.GlobalServices.GlobalInterface;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Civil_Registration_System_Platform.Account.AccountRepository
 {
@@ -20,27 +23,20 @@ namespace Civil_Registration_System_Platform.Account.AccountRepository
             _userManager = userManager;
         }
 
-        //  existing methods 
-
         public async Task<List<UserAccount>> GetUnConfirmedUserAsync()
         {
             UserAccount userLogin = await _userGlobalServices.GetUser();
-            await _userGlobalServices.CheckIfCanReviewAccounts(); // Admin أو AccountReviewer
-            var isReviewer = await _userGlobalServices.IsAccountReviewer();
+            await _userGlobalServices.CheckIfCanReviewAccounts(); // Admin only now
+
+            var officeIds = await _context.Offices
+                .Where(o => userLogin.GovernorateId.HasValue
+                         && o.GovernorateId == userLogin.GovernorateId.Value)
+                .Select(o => o.OfficeId)
+                .ToListAsync();
 
             var query = _context.UserAccounts
-                .Where(u => !u.IsConfirmed && !u.IsRejected);
-
-            if (!isReviewer)
-            {
-                var officeIds = await _context.Offices
-                    .Where(o => userLogin.GovernorateId.HasValue
-                             && o.GovernorateId == userLogin.GovernorateId.Value)
-                    .Select(o => o.OfficeId)
-                    .ToListAsync();
-
-                query = query.Where(u => u.OfficeId.HasValue && officeIds.Contains(u.OfficeId.Value));
-            }
+                .Where(u => !u.IsConfirmed && !u.IsRejected)
+                .Where(u => u.OfficeId.HasValue && officeIds.Contains(u.OfficeId.Value));
 
             return await query
                 .Include(u => u.Governorate)
@@ -48,23 +44,19 @@ namespace Civil_Registration_System_Platform.Account.AccountRepository
                 .ToListAsync();
         }
 
-        public async Task<UserAccount> GetById(string userId)
+        public async Task<UserAccount?> GetById(string userId)
         {
             UserAccount userLogin = await _userGlobalServices.GetUser();
-            await _userGlobalServices.CheckIfCanReviewAccounts(); // Admin أو AccountReviewer
-            var isReviewer = await _userGlobalServices.IsAccountReviewer();
+            await _userGlobalServices.CheckIfCanReviewAccounts(); // Admin only now
+
+            var officeIds = await _context.Offices
+                .Where(o => userLogin.GovernorateId.HasValue
+                         && o.GovernorateId == userLogin.GovernorateId.Value)
+                .Select(o => o.OfficeId)
+                .ToListAsync();
 
             var query = _context.UserAccounts.AsQueryable();
-            if (!isReviewer)
-            {
-                var officeIds = await _context.Offices
-                    .Where(o => userLogin.GovernorateId.HasValue
-                             && o.GovernorateId == userLogin.GovernorateId.Value)
-                    .Select(o => o.OfficeId)
-                    .ToListAsync();
-
-                query = query.Where(u => u.OfficeId.HasValue && officeIds.Contains(u.OfficeId.Value));
-            }
+            query = query.Where(u => u.OfficeId.HasValue && officeIds.Contains(u.OfficeId.Value));
 
             UserAccount? userAccount = await query
                 .SingleOrDefaultAsync(u => u.Id == userId);
@@ -87,7 +79,6 @@ namespace Civil_Registration_System_Platform.Account.AccountRepository
             UserAccount userLogin = await _userGlobalServices.GetUser();
             return userLogin;
         }
-
 
         public async Task<List<UserAccount>> GetAdminsAsync()
         {

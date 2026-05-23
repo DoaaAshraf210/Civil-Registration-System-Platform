@@ -25,18 +25,17 @@ namespace Civil_Registration_System_Platform.Models
 
 
         public int? GovernorateId { get; set; }        
-        public Governorate? Governorate { get; set; } // [ForeignKey("GovernorateId")]  
+        public Governorate? Governorate { get; set; } 
 
         public int? OfficeId { get; set; }       
-        public Office? Office { get; set; } //  [ForeignKey("OfficeId")] 
+        public Office? Office { get; set; } 
 
          
         public int? ManageOfficeId { get; set; }        
-        public Office? ManageOffice { get; set; } //[ForeignKey("ManageOfficeId")] 
+        public Office? ManageOffice { get; set; } 
         
-        public List<Application>? ApplicationsApply { get; set; } // [InverseProperty("UserAccount")]     
-        public List<Application>? ApplicationsReviewed { get; set; } //  [InverseProperty("ReviewedUserAccount")]      
-        public List<Appointment>? Appointments { get; set; } //  [InverseProperty("ScheduledBy")]      
-        public List<TimelineEntry>? TimelineEntries { get; set; } //  [InverseProperty("PerformedBy")] 
-    }
+        public List<Application>? ApplicationsApply { get; set; } 
+        public List<Application>? ApplicationsReviewed { get; set; }     
+        public List<Appointment>? Appointments { get; set; } 
+        public List<TimelineEntry>? TimelineEntries { get; set; }     }
 }
